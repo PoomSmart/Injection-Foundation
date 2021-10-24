@@ -1,0 +1,11 @@
+Package: com.ps.injectionfoundation
+Name: Injection Foundation
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Inject UIKit tweaks into Foundation apps.
+Maintainer: PoomSmart
+Author: PoomSmart
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000), firmware (>= 7.0)
+Depiction: https://poomsmart.github.io/repo/depictions/injectionfoundation.html
+SileoDepiction: https://poomsmart.github.io/repo/sileodepictions/injectionfoundation.json
