@@ -11,14 +11,13 @@ NSString *dylibDir = @"/Library/MobileSubstrate/DynamicLibraries";
         NSError *e = nil;
         NSArray *dylibDirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dylibDir error:&e];
         if (e) {
-            HBLogError(@"Itself: Could not read dynamic libraries directory");
+            HBLogError(@"InjectionFoundation: Could not read dynamic libraries directory");
             return;
         }
         NSArray *plists = [dylibDirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH %@", @"plist"]];
         for (NSString *plist in plists) {
-            if ([plist isEqualToString:@"Itself.plist"]) {
+            if ([plist isEqualToString:@"AAAInjectionFoundation.plist"])
                 continue;
-            }
             NSString *plistPath = [dylibDir stringByAppendingPathComponent:plist];
             NSDictionary *filter = [NSDictionary dictionaryWithContentsOfFile:plistPath];
             NSArray *supportedVersions = filter[@"Filter"][@"CoreFoundationVersion"];
