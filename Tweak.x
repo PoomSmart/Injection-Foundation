@@ -1,18 +1,27 @@
+#import <Foundation/Foundation.h>
+#import <HBLog.h>
 #import <dlfcn.h>
 
 extern char ***_NSGetArgv();
 
-NSString *dylibDir = @"/Library/MobileSubstrate/DynamicLibraries";
+NSString *dir = @"/Library/MobileSubstrate/DynamicLibraries";
+NSString *rootlessDir = @"/var/jb/Library/MobileSubstrate/DynamicLibraries";
 
 // Credits to simject (my contributions) and Choicy
 %ctor {
     char *arg0 = **_NSGetArgv();
     if (strstr(arg0, "/Application") && NSBundle.mainBundle.bundleIdentifier) {
         NSError *e = nil;
+        NSString *dylibDir = dir;
         NSArray *dylibDirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dylibDir error:&e];
         if (e) {
-            HBLogError(@"InjectionFoundation: Could not read dynamic libraries directory");
-            return;
+            e = nil;
+            dylibDir = rootlessDir;
+            dylibDirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dylibDir error:&e];
+            if (e) {
+                HBLogError(@"InjectionFoundation: Could not read dynamic libraries directory");
+                return;
+            }
         }
         NSArray *plists = [dylibDirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH %@", @"plist"]];
         for (NSString *plist in plists) {
